@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HotelTech — Catálogo Arquitectónico de Suites</title>
+    <link rel="stylesheet" th:href="@{/css/hoteltech-luxury.css}">
+</head>
+<body>
+<div class="ht-dock-wrap">
+    <header class="ht-dock">
+        <a href="/reservations" class="ht-brand">
+            <div class="ht-brand-emblem">H</div>
+            <div>
+                <div class="ht-brand-name">HotelTech</div>
+                <span class="ht-brand-tag">Sanctuary OS</span>
+            </div>
+        </a>
+
+        <nav class="ht-nav-pills">
+            <a href="/reservations" class="ht-pill-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Reservas & Calendario
+            </a>
+            <a href="/rooms" class="ht-pill-link active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>
+                Catálogo Suites
+            </a>
+            <a href="/guests" class="ht-pill-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                Huéspedes
+            </a>
+        </nav>
+
+        <div class="ht-dock-actions">
+            <span class="ht-role-badge" sec:authentication="name">staff@hoteltech.com</span>
+            <form th:action="@{/logout}" method="post" style="margin:0;">
+                <button type="submit" class="ht-btn-exit">Salir</button>
+            </form>
+        </div>
+    </header>
+</div>
+
+<main class="ht-stage">
+    <section class="ht-hero" style="min-height:220px; background-image: url('https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1800&q=85');">
+        <div class="ht-hero-top">
+            <div>
+                <div class="ht-kicker">Colección de Estancias</div>
+                <h1 class="ht-hero-title">Suites & Arquitectura Interior</h1>
+                <p class="ht-hero-desc">Explora el inventario fotográfico, consulta disponibilidad real por fechas y administra estados operativos.</p>
+            </div>
+            <button type="button" class="ht-btn ht-btn-terracotta" sec:authorize="hasRole('ADMIN')" data-open-modal="modalNewRoom">
+                + Nueva Suite
+            </button>
+        </div>
+    </section>
+
+    <div th:if="${success}" class="ht-toast ht-toast-ok" th:text="${success}"></div>
+    <div th:if="${error}" class="ht-toast ht-toast-err" th:text="${error}"></div>
+    <div th:if="${filterMsg}" class="ht-toast ht-toast-ok">
+        <span th:text="${filterMsg}"></span>
+        <a href="/rooms" class="ht-btn ht-btn-outline ht-btn-sm">Mostrar Todas</a>
+    </div>
+
+    <!-- Buscador de Disponibilidad por Fechas -->
+    <section class="ht-surface" style="padding:1.35rem 1.75rem;">
+        <form th:action="@{/rooms}" method="get" style="display:flex; flex-wrap:wrap; gap:14px; align-items:end;">
+            <div class="ht-field" style="flex:1; min-width:190px;">
+                <label>Entrada (Check-In)</label>
+                <input type="date" name="checkIn" class="ht-input" required>
+            </div>
+            <div class="ht-field" style="flex:1; min-width:190px;">
+                <label>Salida (Check-Out)</label>
+                <input type="date" name="checkOut" class="ht-input" required>
+            </div>
+            <button type="submit" class="ht-btn ht-btn-forest">Consultar Disponibilidad</button>
+        </form>
+    </section>
+
+    <!-- Catálogo Fotográfico -->
+    <section class="ht-catalog-grid">
+        <article class="ht-suite-item" th:each="r, iter : ${rooms}">
+            <div class="ht-suite-media">
+                <!-- Fotografía curada según categoría de habitación -->
+                <img th:if="${r.type().name() == 'SINGLE'}"
+                     src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=900&q=80" alt="Suite Individual">
+                <img th:if="${r.type().name() == 'DOUBLE'}"
+                     src="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=900&q=80" alt="Suite Doble">
+                <img th:if="${r.type().name() != 'SINGLE' and r.type().name() != 'DOUBLE'}"
+                     src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=900&q=80" alt="Master Suite">
+
+                <div class="ht-suite-media-overlay">
+                    <div>
+                        <span style="font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.14em; color:var(--sand);" th:text="${r.type()}">SUITE</span>
+                        <h3 style="font-family:var(--font-display); font-size:1.75rem; margin:0; line-height:1;" th:text="'Suite ' + ${r.number()}">Suite 101</h3>
+                    </div>
+                    <span class="ht-pill-status" th:classappend="' ht-st-' + ${r.status().name()}" th:text="${r.status()}">AVAILABLE</span>
+                </div>
+            </div>
+
+            <div class="ht-suite-body">
+                <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:1rem;">
+                    <span style="color:var(--ink-body); font-size:0.9rem;" th:text="'Capacidad máxima: ' + ${r.capacity()} + ' huéspedes'">2 huéspedes</span>
+                    <div>
+                        <strong style="font-family:var(--font-display); font-size:1.65rem; color:var(--terracotta);" th:text="'$' + ${r.pricePerNight()}">$150000</strong>
+                        <span style="font-size:0.78rem; color:var(--ink-muted);">/ noche</span>
+                    </div>
+                </div>
+
+                <!-- Control de Estado (Solo ADMIN) -->
+                <form sec:authorize="hasRole('ADMIN')" th:action="@{/rooms/{id}/status(id=${r.roomId()})}" method="post" style="display:flex; gap:8px; padding-top:1rem; border-top:1px solid var(--border-subtle);">
+                    <select name="status" class="ht-select" style="height:38px; font-size:0.82rem;">
+                        <option value="AVAILABLE" th:selected="${r.status().name() == 'AVAILABLE'}">AVAILABLE</option>
+                        <option value="OCCUPIED" th:selected="${r.status().name() == 'OCCUPIED'}">OCCUPIED</option>
+                        <option value="MAINTENANCE" th:selected="${r.status().name() == 'MAINTENANCE'}">MAINTENANCE</option>
+                    </select>
+                    <button type="submit" class="ht-btn ht-btn-outline ht-btn-sm">Guardar</button>
+                </form>
+            </div>
+        </article>
+    </section>
+</main>
+
+<!-- MODAL: NUEVA SUITE (SOLO ADMIN) -->
+<div id="modalNewRoom" class="ht-modal-backdrop" sec:authorize="hasRole('ADMIN')">
+    <div class="ht-modal-box">
+        <button type="button" class="ht-modal-close" data-close-modal>✕</button>
+        <div style="font-family:var(--font-mono); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.14em; color:var(--terracotta);">Expansión de Inventario</div>
+        <h2 style="font-family:var(--font-display); font-size:2rem; margin:4px 0 1.25rem;">Registrar Nueva Suite</h2>
+
+        <form th:action="@{/rooms/new}" method="post">
+            <div class="ht-form-2col" style="margin-bottom:1.5rem;">
+                <div class="ht-field">
+                    <label>Número de Suite</label>
+                    <input type="text" name="number" class="ht-input" placeholder="Ej. 402" required>
+                </div>
+                <div class="ht-field">
+                    <label>Categoría</label>
+                    <select name="type" class="ht-select" required>
+                        <option th:each="t : ${roomTypes}" th:value="${t}" th:text="${t}"></option>
+                    </select>
+                </div>
+                <div class="ht-field">
+                    <label>Capacidad</label>
+                    <input type="number" name="capacity" min="1" max="10" class="ht-input" placeholder="2" required>
+                </div>
+                <div class="ht-field">
+                    <label>Tarifa por Noche ($)</label>
+                    <input type="number" step="0.01" min="1" name="pricePerNight" class="ht-input" placeholder="280000" required>
+                </div>
+            </div>
+            <button type="submit" class="ht-btn ht-btn-terracotta" style="width:100%; height:48px;">Crear Suite en Catálogo</button>
+        </form>
+    </div>
+</div>
+
+<script th:src="@{/js/hoteltech-ui.js}"></script>
+</body>
+</html>

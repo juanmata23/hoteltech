@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 — Estancia No Encontrada · HotelTech</title>
+    <link rel="stylesheet" th:href="@{/css/hoteltech-luxury.css}">
+</head>
+<body>
+<div class="ht-immersive-login" style="background-image: url('https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1920&q=85');">
+    <div class="ht-glass-login-card" style="position:relative; z-index:2; max-width:520px; text-align:center;">
+        <div class="ht-brand-emblem" style="margin:0 auto 1rem;">404</div>
+        <div class="ht-mono" style="color:var(--terracotta); font-size:0.75rem; letter-spacing:0.15em;">RUTA NO ENCONTRADA</div>
+        <h1 style="font-family:var(--font-display); font-size:2.4rem; margin:8px 0 12px;">Esta ala del resort no existe.</h1>
+        <p style="color:var(--ink-body); margin-bottom:1.75rem;" th:text="${'La ruta ' + (path ?: '') + ' no está disponible en el sistema.'}">La ruta solicitada no existe.</p>
+        <a href="/reservations" class="ht-btn ht-btn-terracotta" style="width:100%;">Volver al Centro de Control</a>
+    </div>
+</div>
+</body>
+</html>

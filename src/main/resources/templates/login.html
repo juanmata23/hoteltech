@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HotelTech — Resort & Hospitality OS</title>
+    <link rel="stylesheet" th:href="@{/css/hoteltech-luxury.css}">
+</head>
+<body>
+<div class="ht-immersive-login">
+    <div class="ht-login-stage">
+        <!-- Narrativa Visual -->
+        <div style="color: var(--ink-light);">
+            <div style="display:flex; align-items:center; gap:14px; margin-bottom:2rem;">
+                <div class="ht-brand-emblem">H</div>
+                <div>
+                    <div class="ht-brand-name" style="font-size:1.7rem;">HotelTech</div>
+                    <span class="ht-brand-tag">Sanctuary Hospitality OS</span>
+                </div>
+            </div>
+
+            <div class="ht-kicker">Arquitectura de Hospitalidad</div>
+            <h1 style="font-family: var(--font-display); font-size: clamp(2.6rem, 4.5vw, 4rem); font-weight: 600; line-height: 1.04; margin: 0 0 1.25rem;">
+                Donde cada estadía comienza con calma y precisión.
+            </h1>
+            <p style="font-size: 1.05rem; color: rgba(247, 243, 236, 0.82); max-width: 500px; line-height: 1.7;">
+                Orquestación integral de suites, reservas sin solapamientos, registro de huéspedes y auditoría ejecutiva en tiempo real.
+            </p>
+        </div>
+
+        <!-- Tarjeta Flotante de Cristal -->
+        <div class="ht-glass-login-card">
+            <div style="font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--terracotta); margin-bottom:6px;">
+                Acceso Autorizado
+            </div>
+            <h2 style="font-family:var(--font-display); font-size:2.1rem; margin:0 0 6px; color:var(--ink-dark);">
+                Bienvenido de vuelta
+            </h2>
+            <p style="color:var(--ink-body); margin:0 0 1.5rem; font-size:0.92rem;">
+                Ingresa tus credenciales de conserjería o dirección.
+            </p>
+
+            <div th:if="${param.error}" class="ht-toast ht-toast-err">
+                Credenciales inválidas o usuario inactivo.
+            </div>
+            <div th:if="${param.logout}" class="ht-toast ht-toast-ok">
+                Has cerrado sesión correctamente.
+            </div>
+
+            <form th:action="@{/login}" method="post">
+                <div class="ht-field" style="margin-bottom: 1rem;">
+                    <label for="loginEmail">Correo Electrónico</label>
+                    <input id="loginEmail" type="email" name="username" class="ht-input" placeholder="admin@hoteltech.com" required autofocus>
+                </div>
+
+                <div class="ht-field" style="margin-bottom: 1.5rem;">
+                    <label for="loginPassword">Contraseña</label>
+                    <input id="loginPassword" type="password" name="password" class="ht-input" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="ht-btn ht-btn-terracotta" style="width:100%; height:50px; font-size:0.95rem;">
+                    Desbloquear Panel Operativo
+                </button>
+            </form>
+
+            <div style="margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid var(--border-subtle);">
+                <div style="font-family:var(--font-mono); font-size:0.68rem; text-transform:uppercase; letter-spacing:0.14em; color:var(--ink-muted); margin-bottom:6px;">
+                    Llaves Rápidas de Demostración
+                </div>
+                <button type="button" class="ht-keycard-btn" data-fill-email="admin@hoteltech.com" data-fill-pass="admin123">
+                    <div>
+                        <strong style="display:block; font-size:0.86rem; color:var(--ink-dark);">Dirección General</strong>
+                        <span class="ht-mono" style="font-size:0.75rem; color:var(--ink-muted);">admin@hoteltech.com</span>
+                    </div>
+                    <span class="ht-pill-status ht-st-PENDING">ADMIN</span>
+                </button>
+                <button type="button" class="ht-keycard-btn" data-fill-email="recepcion@hoteltech.com" data-fill-pass="recep123">
+                    <div>
+                        <strong style="display:block; font-size:0.86rem; color:var(--ink-dark);">Recepción & Front Desk</strong>
+                        <span class="ht-mono" style="font-size:0.75rem; color:var(--ink-muted);">recepcion@hoteltech.com</span>
+                    </div>
+                    <span class="ht-pill-status ht-st-AVAILABLE">RECEP</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/hoteltech-ui.js}"></script>
+</body>
+</html>

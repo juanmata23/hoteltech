@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HotelTech — Guestbook & Huéspedes</title>
+    <link rel="stylesheet" th:href="@{/css/hoteltech-luxury.css}">
+</head>
+<body>
+<div class="ht-dock-wrap">
+    <header class="ht-dock">
+        <a href="/reservations" class="ht-brand">
+            <div class="ht-brand-emblem">H</div>
+            <div>
+                <div class="ht-brand-name">HotelTech</div>
+                <span class="ht-brand-tag">Sanctuary OS</span>
+            </div>
+        </a>
+
+        <nav class="ht-nav-pills">
+            <a href="/reservations" class="ht-pill-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Reservas & Calendario
+            </a>
+            <a href="/rooms" class="ht-pill-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>
+                Catálogo Suites
+            </a>
+            <a href="/guests" class="ht-pill-link active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                Huéspedes
+            </a>
+        </nav>
+
+        <div class="ht-dock-actions">
+            <span class="ht-role-badge" sec:authentication="name">staff@hoteltech.com</span>
+            <form th:action="@{/logout}" method="post" style="margin:0;">
+                <button type="submit" class="ht-btn-exit">Salir</button>
+            </form>
+        </div>
+    </header>
+</div>
+
+<main class="ht-stage">
+    <section class="ht-hero" style="min-height:210px; background-image: url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1800&q=85');">
+        <div class="ht-hero-top">
+            <div>
+                <div class="ht-kicker">CRM & Hospitalidad</div>
+                <h1 class="ht-hero-title">Libro de Huéspedes</h1>
+                <p class="ht-hero-desc">Perfiles verificados, documentos de identidad y contacto directo para atención personalizada.</p>
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <input id="htLiveSearch" type="text" class="ht-input" style="width:250px; background:rgba(255,255,255,0.92);" placeholder="Buscar huésped o documento...">
+                <button type="button" class="ht-btn ht-btn-terracotta" data-open-modal="modalNewGuest">+ Registrar Huésped</button>
+            </div>
+        </div>
+    </section>
+
+    <div th:if="${success}" class="ht-toast ht-toast-ok" th:text="${success}"></div>
+    <div th:if="${error}" class="ht-toast ht-toast-err" th:text="${error}"></div>
+
+    <!-- Tarjetas de Huéspedes -->
+    <section class="ht-guest-grid">
+        <article class="ht-guest-card" th:each="g : ${guests}" data-searchable="true">
+            <div class="ht-monogram" th:text="${#strings.substring(g.name(), 0, 1).toUpperCase()}">A</div>
+            <div style="min-width:0; flex:1;">
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                    <strong style="font-size:1.05rem; color:var(--ink-dark);" th:text="${g.name()}">Nombre</strong>
+                    <span class="ht-mono" style="font-size:0.72rem; color:var(--ink-muted);" th:text="'#' + ${g.guestId()}">#1</span>
+                </div>
+                <div class="ht-mono" style="font-size:0.78rem; color:var(--terracotta); margin-top:2px;" th:text="'DOC · ' + ${g.documentNumber()}">DOC</div>
+                <div style="font-size:0.84rem; color:var(--ink-body); margin-top:8px;" th:text="${g.phone()}">Tel</div>
+                <div style="font-size:0.84rem; color:var(--ink-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" th:text="${g.email()}">Email</div>
+            </div>
+        </article>
+    </section>
+</main>
+
+<!-- MODAL: NUEVO HUÉSPED -->
+<div id="modalNewGuest" class="ht-modal-backdrop">
+    <div class="ht-modal-box">
+        <button type="button" class="ht-modal-close" data-close-modal>✕</button>
+        <div style="font-family:var(--font-mono); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.14em; color:var(--terracotta);">Registro CRM</div>
+        <h2 style="font-family:var(--font-display); font-size:2rem; margin:4px 0 1.25rem;">Alta de Nuevo Huésped</h2>
+
+        <form th:action="@{/guests/new}" method="post">
+            <div class="ht-form-2col" style="margin-bottom:1.5rem;">
+                <div class="ht-field">
+                    <label>Nombre Completo</label>
+                    <input type="text" name="name" placeholder="Ej. Camila Restrepo" class="ht-input" required>
+                </div>
+                <div class="ht-field">
+                    <label>Documento de Identidad</label>
+                    <input type="text" name="documentNumber" placeholder="CC / Pasaporte" class="ht-input" required>
+                </div>
+                <div class="ht-field">
+                    <label>Teléfono</label>
+                    <input type="text" name="phone" placeholder="+57 310 000 0000" class="ht-input" required>
+                </div>
+                <div class="ht-field">
+                    <label>Correo Electrónico</label>
+                    <input type="email" name="email" placeholder="camila@correo.com" class="ht-input" required>
+                </div>
+            </div>
+            <button type="submit" class="ht-btn ht-btn-terracotta" style="width:100%; height:48px;">Guardar Perfil</button>
+        </form>
+    </div>
+</div>
+
+<script th:src="@{/js/hoteltech-ui.js}"></script>
+</body>
+</html>
