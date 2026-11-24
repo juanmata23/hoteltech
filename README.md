@@ -403,45 +403,49 @@ La API devuelve `201 Created` al registrar recursos, `204 No Content` en cambios
 
 ## 8. Capturas UI/UX
 
-![alt text](image-11.png)
+## 8. Capturas UI/UX
+
+![Vista general](images/image-11.png)
 
 ### Inicio de sesión
 
-![alt text](image-1.png)
+![Inicio de sesión](images/image-1.png)
 
 ### Habitaciones
 
-![alt text](image-2.png)
+![Habitaciones](images/image-2.png)
 
 ### Consulta de disponibilidad
 
-![alt text](image-3.png)
+![Consulta de disponibilidad](images/image-3.png)
 
 ### Huéspedes
 
-![alt text](image-4.png)
+![Huéspedes](images/image-4.png)
 
 ### Reservas
-![alt text](image-5.png)
+
+![Reservas](images/image-5.png)
 
 ### Check-in y check-out
-![alt text](image-6.png)
+
+![Check-in y check-out](images/image-6.png)
 
 ### Reporte de reservas PDF
 
-![alt text](image-7.png)
+![Reporte de reservas PDF](images/image-7.png)
 
 ### Comprobante PDF
 
-![alt text](image-8.png)
+![Comprobante PDF](images/image-8.png)
 
 ### Error 404
 
-![alt text](image-9.png)
+![Error 404](images/image-9.png)
 
 ### Error 500
 
-![alt text](image-10.png)
+![Error 500](images/image-10.png)
 
 ## 9. Análisis personal
 
